@@ -32,8 +32,9 @@ jobs:
           export LLVM_PROFILE_FILE="your_name-%p-%m.profraw" &&
           export RUSTDOCFLAGS="-Cpanic=abort" &&
           cargo test --verbose
-        - ./grcov . -s . --binary-path ./target/debug/ -t coveralls --branch --ignore-not-existing --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json
-        - bash <(curl -s https://codecov.io/bash) -s coveralls.json
+        - ./grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "/*" -o lcov.info
+        - bash <(curl -s https://codecov.io/bash) -f lcov.info
+          
 
 #        export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort" &&
 #          grcov . -s . --binary-path ./target/debug/ -t coveralls --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json &&
