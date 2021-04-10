@@ -8,6 +8,15 @@ rust:
   - beta
   - stable
 cache: cargo
+fast_finish: true
+allow_failures: 
+  - nightly
+include:
+      script: |
+        export RUST_BACKTRACE=1 &&
+        cargo build --verbose &&
+        cargo test --verbose &&  
+        cargo doc --no-deps --verbose
 
 jobs:
   include:
@@ -26,13 +35,3 @@ jobs:
         bash <(curl -s https://codecov.io/bash) -s coveralls.json
 
 #          grcov . -s . --binary-path ./target/debug/ -t coveralls --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json &&
-
-matrix:
-  fast_finish: true
-  allow_failures: nightly
-  include:
-        script: |
-          export RUST_BACKTRACE=1 &&
-          cargo build --verbose &&
-          cargo test --verbose &&  
-          cargo doc --no-deps --verbose
