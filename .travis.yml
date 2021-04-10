@@ -32,7 +32,7 @@ jobs:
           export LLVM_PROFILE_FILE="your_name-%p-%m.profraw" &&
           export RUSTDOCFLAGS="-Cpanic=abort" &&
           cargo test --verbose
-        - ./grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "/*" -o lcov.info
+        - ./grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "/*" -o lcov.info # from https://crates.io/crates/grcov/0.5.13#grcov-with-travis
         - bash <(curl -s https://codecov.io/bash) -f lcov.info
           
 
