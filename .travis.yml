@@ -30,7 +30,7 @@ jobs:
           export LLVM_PROFILE_FILE="your_name-%p-%m.profraw" &&
           export RUSTDOCFLAGS="-Cpanic=abort" &&
           cargo test --verbose
-        - grcov . -s . --binary-path ./target/debug/ -t coveralls --branch --ignore-not-existing --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json &&
+        - grcov . -s . --binary-path ./target/debug/ -t coveralls --branch --ignore-not-existing --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json
         - bash <(curl -s https://codecov.io/bash) -s coveralls.json
 
 #        export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort" &&
