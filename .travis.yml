@@ -5,8 +5,8 @@ os:
   - osx
 rust: 
   - nightly
-  # - beta
-  # - stable
+  - beta
+  - stable
 cache: cargo
 fast_finish: true
 allow_failures: 
@@ -20,9 +20,11 @@ include:
 jobs:
   include:
     - name: Coverage
+      branches:
+        only:
+        - master
       before_install:
         - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
-
       before_script:
 #        - cargo install grcov # failing, install from tarball
         - rustup component add llvm-tools-preview
@@ -35,6 +37,5 @@ jobs:
         - ./grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "/*" -o lcov.info # from https://crates.io/crates/grcov/0.5.13#grcov-with-travis
         - bash <(curl -s https://codecov.io/bash) -f lcov.info
           
-
 #        export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort" &&
 #          grcov . -s . --binary-path ./target/debug/ -t coveralls --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json &&
