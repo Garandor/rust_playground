@@ -2,27 +2,26 @@ language: rust
 os:
   - linux
   - windows
-  - mac
+  - osx
 rust: 
   - nightly
-  - beta
-  - stable
+  # - beta
+  # - stable
 cache: cargo
 fast_finish: true
 allow_failures: 
-  - nightly
+  # - nightly
 include:
-      script: |
-        export RUST_BACKTRACE=1 &&
-        cargo build --verbose &&
-        cargo test --verbose &&  
-        cargo doc --no-deps --verbose
+      script:
+        - export RUST_BACKTRACE=1 && cargo build --verbose
+        - export RUST_BACKTRACE=1 && cargo test --verbose
+        - export RUST_BACKTRACE=1 && cargo doc --no-deps --verbose
 
 jobs:
   include:
     - name: Coverage
       before_script:
-        - cargo install grcov || echo "grcov already installed" 
+        - cargo install grcov
         - rustup component add llvm-tools-preview
       script:
         - export CARGO_INCREMENTAL=0 &&
