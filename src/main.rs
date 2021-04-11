@@ -1,25 +1,22 @@
-use std::{ops::Add};
 
-fn add_int<'a,'b,T>(x: &'a T,y: &'a T) -> T
-where
-    &'a T: Add<&'a T, Output=T>
-{
-    x + y
-}
-
+use clap::{App};
+use rust_playground::*;
 fn main() {
-    println!("Hello, world!");
-}
+    let matches = App::new("My Super Program")
+        .about("Does awesome things")
+        .arg("<seq>... 'A sequence of whole positive numbers, i.e. 20 25 30'")
+        .get_matches();
 
-#[test]
-fn test_add(){
-    let a= 1u8;
-    let b= 4u8;
-    assert_eq!(a+b,add_int(&a,&b));
-    let a= 1u64;
-    let b= 4u64;
-    assert_eq!(a+b,add_int(&a,&b));
-    let a= 1f64;
-    let b= 4f64;
-    assert_eq!(a+b,add_int(&a,&b));
+    println!("{:?}",matches);
+
+    let mut vect: Vec<u32> = vec![];
+    for v in matches
+        .values_of_t::<u32>("seq")
+        .unwrap_or_else(|e| e.exit())
+    {
+        vect.push(v);
+    }
+    let a = vect[0];
+    let b = vect[1];
+    println!("distance: {}\nadded: {}", distance((a as f32, b as f32),(b as f32, a as f32)), add_int(&a,&b));
 }
