@@ -1,0 +1,40 @@
+language: rust
+os:
+  - linux
+  - windows
+  - osx
+rust: 
+  - nightly
+  - beta
+  - stable
+cache: cargo
+fast_finish: true
+allow_failures: 
+  # - nightly
+include:
+      script:
+        - export RUST_BACKTRACE=1 && cargo build --verbose
+        - export RUST_BACKTRACE=1 && cargo test --verbose
+        - export RUST_BACKTRACE=1 && cargo doc --no-deps --verbose
+
+jobs:
+  include:
+    - name: Coverage
+    - # require the branch name to be master (note for PRs this is the base branch name)
+      if: branch = master
+      before_install:
+        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
+      before_script:
+#        - cargo install grcov # failing, install from tarball
+        - rustup component add llvm-tools-preview
+      script:
+        - export CARGO_INCREMENTAL=0 &&
+          export RUSTFLAGS="-Zinstrument-coverage" &&
+          export LLVM_PROFILE_FILE="your_name-%p-%m.profraw" &&
+          export RUSTDOCFLAGS="-Cpanic=abort" &&
+          cargo test --verbose
+        - ./grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore "/*" -o lcov.info # from https://crates.io/crates/grcov/0.5.13#grcov-with-travis
+        - bash <(curl -s https://codecov.io/bash) -f lcov.info
+          
+#        export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort" &&
+#          grcov . -s . --binary-path ./target/debug/ -t coveralls --token YW0qzuKwPIUbh67GzMIlbdHnljDbHFBS9 > coveralls.json &&
