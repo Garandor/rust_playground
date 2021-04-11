@@ -1,5 +1,13 @@
 use std::ops::Add;
 
+/// Adds two borrowed values of the same type together
+///
+/// Usage:
+///
+/// ```
+/// let sum = rust_playground::add_int(&3u32,&5u32);
+/// assert_eq!(8u32,sum);
+/// ```
 pub fn add_int<'a, T>(x: &'a T, y: &'a T) -> T
 where
     &'a T: Add<&'a T, Output = T>,
